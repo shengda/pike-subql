@@ -1,6 +1,5 @@
 import {Approval, Transaction} from "../types";
 import { AcalaEvmEvent, AcalaEvmCall } from '@subql/acala-evm-processor';
-
 import { BigNumber } from "ethers";
 
 // Setup types from ABI
