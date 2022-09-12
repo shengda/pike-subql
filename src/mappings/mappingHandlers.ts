@@ -1,9 +1,11 @@
 import { Market, Account } from "../types/models";
 import { AcalaEvmEvent } from '@subql/acala-evm-processor';
+import FrontierEthProvider from '@subql/acala-evm-processor/dist/acalaEthProvider';
 import { CToken } from "../types/models/CToken";
 import { createAccount, updateCommonCTokenStats, zeroBD } from "./helpers";
 import '@subql/types/dist/global';
-
+import * as ComptrollerAbi from '../abis/comptroller.json';
+import ethers from 'ethers';
 
 // Setup types from ABI
 type MarketListedEventArgs = [string] & { cToken: string; };
@@ -17,6 +19,11 @@ export async function handleMarketListed(event: AcalaEvmEvent<MarketListedEventA
     // Create the market for this token, since it's now been listed.
     let market = createMarket(event.args.cToken)
     await market.save()
+
+    // Querying contracts
+    const comptroller = new ethers.Contract(event.address, ComptrollerAbi, new FrontierEthProvider());
+    const marketData = await comptroller.markets(event.args.cToken);
+    logger.info(`Market: ${JSON.stringify(marketData)}`);
 }
 
 export async function handleMarketEntered(event: AcalaEvmEvent<MarketEnteredEventArgs>): Promise<void> {
