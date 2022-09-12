@@ -5,7 +5,7 @@ import { CToken } from "../types/models/CToken";
 import { createAccount, updateCommonCTokenStats, zeroBD } from "./helpers";
 import '@subql/types/dist/global';
 import * as ComptrollerAbi from '../abis/comptroller.json';
-import ethers from 'ethers';
+import { ethers } from 'ethers';
 
 // Setup types from ABI
 type MarketListedEventArgs = [string] & { cToken: string; };
