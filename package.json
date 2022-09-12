@@ -20,7 +20,8 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@acala-network/type-definitions": "^4.1.1",
-    "@subql/acala-evm-processor": "dev"
+    "@subql/acala-evm-processor": "dev",
+    "atob": "^2.1.2"
   },
   "devDependencies": {
     "@polkadot/api": "^8",
