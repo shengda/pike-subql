@@ -29,7 +29,7 @@ dataSources:
         address: '0x1aA5d813bA2BC2678b41Bd6AC8798909304a181f' # Comptroller
     assets:
       comptroller:
-        file: ./src/abis/comptroller.json
+        file: ./src/abis/Comptroller.abi.json
     mapping:
       file: ./dist/index.js
       handlers:
@@ -43,3 +43,28 @@ dataSources:
           filter:
             topics:
               - MarketEntered(address,address)
+        - handler: handleMarketExited
+          kind: substrate/AcalaEvmEvent
+          filter:
+            topics:
+              - MarketExited(address,address)
+        - handler: handleNewCloseFactor
+          kind: substrate/AcalaEvmEvent
+          filter:
+            topics:
+              - NewCloseFactor(uint256,uint256)
+        - handler: handleNewCollateralFactor
+          kind: substrate/AcalaEvmEvent
+          filter:
+            topics:
+              - NewCollateralFactor(address,uint256,uint256)
+        - handler: handleNewLiquidationIncentive
+          kind: substrate/AcalaEvmEvent
+          filter:
+            topics:
+              - NewLiquidationIncentiveEventArgs(uint256,uint256)
+        - handler: handleNewPriceOracle
+          kind: substrate/AcalaEvmEvent
+          filter:
+            topics:
+              - NewPriceOracle(address,address)

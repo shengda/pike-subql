@@ -4,4 +4,5 @@ if (global.atob === undefined) {
   global.atob = atob;
 }
 import "@polkadot/api-augment";
-export * from './mappings/mappingHandlers'
+
+export * from './mappings/comptroller'

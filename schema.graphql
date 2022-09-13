@@ -2,10 +2,10 @@
 The Comptroller type has protocol level variables stored
 """
 type Comptroller @entity {
-    "ID is set to 1"
+    "ID is set to 1 since there is only one Comptroller"
     id: ID!
     "Address of price oracle the comptroller uses"
-    priceOracle: Bytes
+    priceOracle: String
     "Factor used to determine repayAmount for liquidating"
     closeFactor: BigInt
     "The percent bonus liquidators get for liquidating"
@@ -19,32 +19,32 @@ Market stores all high level variables for a cToken market
 """
 type Market @entity {
     #Fields that match compounds API
-    "Yearly borrow rate. With 2102400 blocks per year"
+    "CToken address"
+    id: ID!
+    "Yearly borrow rate. With 2628000 blocks per year"
     borrowRate: BigInt!
-    "The cToken contract balance of ERC20 or ETH"
-    cash: BigInt!
+    "Yearly supply rate. With 2104400 blocks per year"
+    supplyRate: BigInt!
     "Collateral factor determining how much one can borrow"
     collateralFactor: BigInt!
     "Exchange rate of tokens / cTokens"
     exchangeRate:  BigInt!
     "Address of the interest rate model"
-    interestRateModelAddress: Bytes!
+    interestRateModelAddress: String!
     "Name of the cToken"
     name: String!
-    "Reserves stored in the contract"
-    reserves: BigInt!
-    "Yearly supply rate. With 2104400 blocks per year"
-    supplyRate: BigInt!
     "CToken symbol"
     symbol: String!
-    "CToken address"
-    id: ID!
+    "The cToken contract balance of ERC20 or ETH"
+    cash: BigInt!
+    "Reserves stored in the contract"
+    reserves: BigInt!
     "Borrows in the market"
     totalBorrows: BigInt!
     "CToken supply. CTokens have 8 decimals"
     totalSupply: BigInt!
     "Underlying token address"
-    underlyingAddress: Bytes!
+    underlyingAddress: String!
     "Underlying token name"
     underlyingName: String!
     "Underlying token symbol"
@@ -59,18 +59,14 @@ type Market @entity {
     borrowIndex: BigInt!
     "The factor determining interest that goes to reserves"
     reserveFactor: BigInt!
-    "Underlying token price in USD"
-    underlyingPriceUSD: BigInt!
-    "Underlying token decimal length"
-    underlyingDecimals: Int!
 }
 
 """
-Account is an ETH address, with a list of all cToken markets the account has
+Account is an EVM address, with a list of all cToken markets the account has
 participated in, along with liquidation information.
 """
 type Account @entity {
-    "User ETH address"
+    "User EVM address"
     id: ID!
     "Array of CTokens user is in"
     tokens: [AccountCToken!]! @derivedFrom(field: "account")
