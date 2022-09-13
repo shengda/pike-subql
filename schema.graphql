@@ -49,6 +49,10 @@ type Market @entity {
     underlyingName: String!
     "Underlying token symbol"
     underlyingSymbol: String!
+    "Underlying token price in USD"
+    underlyingPriceUSD: BigInt!
+    "Underlying token decimal length"
+    underlyingDecimals: Int!
 
     # Fields that are not in compounds api
     "Block the market is updated to"

@@ -15,7 +15,8 @@ type NewLiquidationIncentiveEventArgs = [BigNumber, BigNumber] & {oldLiquidation
 type NewPriceOracleEventArgs = [string, string] & {oldPriceOracle: string, newPriceOracle: string};
 
 export async function handleMarketListed(event: AcalaEvmEvent): Promise<void> {
-    await getMarket(event.args.cToken);
+    const market = await getMarket(event.args.cToken);
+    logger.info(`Market listed: ${market.id}`)
 }
 
 export async function handleMarketEntered(event: AcalaEvmEvent<MarketEnteredEventArgs>): Promise<void> {
@@ -23,6 +24,7 @@ export async function handleMarketEntered(event: AcalaEvmEvent<MarketEnteredEven
     const market = await getMarket(event.args.cToken);
     // Ensures that the account is created if absent
     const account = await getAccount(event.args.account);
+    logger.info(`Account ${account.id} enters market ${market.name}`);
 
     const cTokenStats = await updateCommonCTokenStats(
         market.id,
@@ -42,6 +44,7 @@ export async function handleMarketExited(event: AcalaEvmEvent<MarketExitedEventA
     const market = await getMarket(event.args.cToken);
     // Ensures that the account is created if absent
     const account = await getAccount(event.args.account);
+    logger.info(`Account ${account.id} exits market ${market.name}`);
 
     const cTokenStats = await updateCommonCTokenStats(
         market.id,
@@ -60,6 +63,7 @@ export async function handleNewCloseFactor(event: AcalaEvmEvent<NewCloseFactorEv
     // Ensures Comptroller is created if absent
     const comptroller = await getComptroller("1");
     comptroller.closeFactor = BigInt(event.args.newCloseFactorMantissa.toString());
+    logger.info(`Close factor updated: Old = ${event.args.oldCloseFactorMantissa.toString()}, new = ${event.args.newCloseFactorMantissa.toString()}`);
     comptroller.save();
 }
 
@@ -67,6 +71,7 @@ export async function handleNewCollateralFactor(event: AcalaEvmEvent<NewCollater
     // Ensures that the market is created if absent
     const market = await getMarket(event.args.cToken);
     market.collateralFactor = BigInt(event.args.newCollateralFactorMantissa.toString());
+    logger.info(`Collateral factor updated: Old = ${event.args.oldCollateralFactorMantissa.toString()}, new = ${event.args.newCollateralFactorMantissa.toString()}`);
     market.save();
 }
 
@@ -74,6 +79,7 @@ export async function handleNewLiquidationIncentive(event: AcalaEvmEvent<NewLiqu
     // Ensures Comptroller is created if absent
     const comptroller = await getComptroller("1");
     comptroller.liquidationIncentive = BigInt(event.args.newLiquidationIncentiveMantissa.toString());
+    logger.info(`Liquidation incentive updated: Old = ${event.args.oldLiquidationIncentiveMantissa.toString()}, new = ${event.args.newLiquidationIncentiveMantissa.toString()}`)
     comptroller.save();
 }
 
@@ -81,5 +87,6 @@ export async function handleNewPriceOracle(event: AcalaEvmEvent<NewPriceOracleEv
     // Ensures Comptroller is created if absent
     const comptroller = await getComptroller("1");
     comptroller.priceOracle = event.args.newPriceOracle;
+    logger.info(`Price oracle updated: Old = ${event.args.oldPriceOracle}, new = ${event.args.newPriceOracle}`);
     comptroller.save();
 }
